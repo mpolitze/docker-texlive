@@ -20,6 +20,25 @@ permissions:
   actions: write
 
 jobs:
+  build-arm64:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          push: false
+          platforms: linux/arm64
+          tags: local/texlive:arm64
+          outputs: type=docker,dest=${{ runner.temp }}/texlive-arm64.tar
+      - name: Upload arm64 image as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: texlive-arm64
+          path: ${{ runner.temp }}/texlive-arm64.tar
+          retention-days: 1
+  
   build:
     runs-on: ubuntu-latest
     steps:
@@ -45,8 +64,14 @@ jobs:
       #     registry: ghcr.io
       #     username: koppor
       #     password: ${{ secrets.CR_PAT }}
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+      - name: Download arm64 image from artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: texlive-arm64
+          path: ${{ runner.temp }}
+      - name: Load arm64 image
+        run: |
+          docker load --input ${{ runner.temp }}/texlive-arm64.tar
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Build and push
@@ -54,9 +79,22 @@ jobs:
         with:
           push: false
           platforms: linux/amd64
+          tags: local/texlive:amd64
+          #tags: ${{ steps.meta.outputs.tags }}
+          #labels: ${{ steps.meta.outputs.labels }}
+      - name: Create and push multi arch manifest
+        run: |
+            docker manifest create local/texlive:multiarch local/texlive:amd64 local/texlive:arm64
+      - name: Image digest
+        run: |
+            docker manifest inspect
+            echo ${{ steps.docker_build.outputs.digest }}
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-      - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
       # - uses: actions/checkout@v4
       # - uses: gautamkrishnar/keepalive-workflow@v2

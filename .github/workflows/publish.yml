@@ -28,6 +28,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
+          file: Dockerfile.simple
           push: false
           platforms: linux/arm64
           tags: local/texlive:arm64
@@ -78,13 +79,13 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
+          file: Dockerfile.simple
           push: false
           platforms: linux/amd64
           tags: local/texlive:amd64
-          #tags: ${{ steps.meta.outputs.tags }}
-          #labels: ${{ steps.meta.outputs.labels }}
       - name: Create and push multi arch manifest
         run: |
+            docker images -a
             docker manifest create local/texlive:multiarch local/texlive:amd64 local/texlive:arm64
       - name: Image digest
         run: |
@@ -93,6 +94,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
+          file: Dockerfile.simple
           push: true
           platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}

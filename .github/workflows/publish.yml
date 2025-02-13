@@ -86,7 +86,7 @@ jobs:
         run: |
             docker load --input ${{ runner.temp }}/texlive-arm64.tar
             docker images -a
-            docker manifest create ghcr.io/mpolitze/texlive:tmp ghcr.io/mpolitze/texlive:amd64
+            docker manifest create ghcr.io/mpolitze/texlive:tmp ghcr.io/mpolitze/texlive:arm64
       - name: Image digest
         run: |
             docker manifest inspect ghcr.io/mpolitze/texlive:tmp

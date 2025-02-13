@@ -78,15 +78,15 @@ jobs:
         with:
           file: Dockerfile.simple
           push: false
-          outputs: type=docker,dest=${{ runner.temp }}/texlive-amd64.tar
+          #outputs: type=docker,dest=${{ runner.temp }}/texlive-amd64.tar
+          load: true
           platforms: linux/amd64
           tags: ghcr.io/mpolitze/texlive:amd64
       - name: Create multi arch manifest
         run: |
-            docker load --input ${{ runner.temp }}/texlive-amd64.tar
             docker load --input ${{ runner.temp }}/texlive-arm64.tar
             docker images -a
-            docker manifest create -a ghcr.io/mpolitze/texlive:tmp ghcr.io/mpolitze/texlive:arm64 ghcr.io/mpolitze/texlive:amd64
+            docker manifest create -a ghcr.io/mpolitze/texlive:tmp ghcr.io/mpolitze/texlive:amd64
       - name: Image digest
         run: |
             docker manifest inspect ghcr.io/mpolitze/texlive:tmp

@@ -83,11 +83,11 @@ jobs:
           push: false
           load: true
           platforms: linux/amd64
-          tags: local/texlive:amd64
+          tags: local/texlive:tmp
       - name: Create and push multi arch manifest
         run: |
             docker images -a
-            docker manifest create local/texlive:multiarch local/texlive:amd64 local/texlive:arm64
+            docker manifest create -a local/texlive:tmp local/texlive:arm64
       - name: Image digest
         run: |
             docker manifest inspect

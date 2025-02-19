@@ -94,6 +94,8 @@ jobs:
       - name: Create multi arch manifest
         run: |
             docker images -a
+            docker push localhost:5000/texlive:arm64
+            docker push localhost:5000/texlive:amd64
             docker buildx imagetools create --tag ghcr.io/mpolitze/docker-texlive:tmp localhost:5000/texlive:arm64 localhost:5000/texlive:amd64
       - name: Push image
         uses: docker/build-push-action@v6

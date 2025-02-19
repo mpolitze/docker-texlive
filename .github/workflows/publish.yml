@@ -32,7 +32,7 @@ jobs:
           push: false
           platforms: linux/arm64
           tags: localhost:5000/texlive:arm64
-          cache-to: gha
+          cache-to: type=gha
           outputs: type=docker,dest=${{ runner.temp }}/texlive-arm64.tar
       #- name: Upload arm64 image as artifact
       #  uses: actions/upload-artifact@v4
@@ -104,7 +104,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           file: Dockerfile.simple
-          cache-from: gha
+          cache-from: type=gha
           push: true
           platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}

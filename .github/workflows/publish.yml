@@ -29,7 +29,7 @@ jobs:
       - name: Build arm64 image
         uses: docker/build-push-action@v6
         with:
-          file: Dockerfile.simple
+          #file: Dockerfile.simple
           push: false
           platforms: linux/arm64
           tags: localhost:5000/texlive:arm64
@@ -105,7 +105,7 @@ jobs:
       - name: Push image
         uses: docker/build-push-action@v6
         with:
-          file: Dockerfile.simple
+          #file: Dockerfile.simple
           cache-from: type=gha
           push: true
           platforms: linux/amd64,linux/arm64

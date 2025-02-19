@@ -75,7 +75,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ GITHUB_TOKEN }}
       # - name: Download arm64 image from artifacts
       #   uses: actions/download-artifact@v4
       #   with:

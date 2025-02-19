@@ -64,7 +64,7 @@ jobs:
             type=schedule,pattern={{date 'YYYY-MM-DD'}}
             type=ref,event=tag
             type=edge,branch=main
-            type=raw,value=test,enable=${{ github.event_name == 'workflow_dispatch' && github.ref_name == 'ghactiontest' }}
+            type=raw,value=test
       # - name: Login to DockerHub
       #   uses: docker/login-action@v2
       #   with:
